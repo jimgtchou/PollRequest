@@ -1,6 +1,12 @@
+Meteor.startup(function() {
+  if(Meteor.isClient) {
+    Session.setDefault("alerts", [])
+  }
+});
+
+
 if (Meteor.isClient) {
   // counter starts at 0
-  Session.setDefault('counter', 0);
 
   // Template.hello.helpers({
   //   counter: function () {
@@ -14,6 +20,7 @@ if (Meteor.isClient) {
   //     Session.set('counter', Session.get('counter') + 1);
   //   }
   // });
+
 
   Template.PollOption.events({
     'click #createPollButton': function() {
@@ -32,7 +39,7 @@ if (Meteor.isClient) {
         limit: pollLimit,
         yes: 0,
         no: 0,
-        createdAt: new Date()
+        createdAt: new Date(),
         transactionHash: undefined,
         block: web3.eth.blockNumber
       };
@@ -80,8 +87,13 @@ if (Meteor.isClient) {
   Template.Polls.helpers({
     polls: function() {
       return Polls.find({}, {sort: {createdAt: -1}});
+    },
+    hasAlerts: function() {
+      return Session.get("alerts").length > 0;
+    },
+    alerts: function() {
+      return Session.get("alerts");
     }
-
   });
 
   Template.Poll.helpers({
@@ -99,6 +111,17 @@ if (Meteor.isClient) {
       pollContract.vote("yes", 0, {from: web3.eth.accounts[0], gas: 200000, gasPrice: gasprice}, function(error,success) {
           console.log("I commited to a YES vote!");
           console.log("Err: " + error + " Success: " + success);
+
+          var alerts = Session.get("alerts");
+
+          if(alerts === undefined) {
+            console.log("bad");
+            return;
+          }
+
+          alerts.push("Your vote is sent to blackchain for verification! Hash: " + success);
+          Session.set("alerts", alerts);
+
           //TODO: Use transaction id to make a list and link it to some 3rd party website.
       });
 
@@ -107,6 +130,16 @@ if (Meteor.isClient) {
           console.log("Successfully vote! Result is: " + result);
           console.log("Successfully voted: " + result.args.votechoice)
 
+          var alerts = Session.get("alerts");
+
+          if(alerts === undefined) {
+            console.log("bad");
+            return;
+          }
+
+          alerts.push("Successfully voted! You voted: " + result.args.votechoice);
+
+          Session.set("alerts", alerts);
         }
         else {
           console.log("Failed vote event! Err is: " + err);
@@ -132,12 +165,35 @@ if (Meteor.isClient) {
           console.log("Err: " + error + " Success: " + success);
           //TODO: Use transaction id to make a list and link it to some 3rd party website.
 
+
+          var alerts = Session.get("alerts");
+
+          if(alerts === undefined) {
+            console.log("bad");
+            return;
+          }
+
+          alerts.push("Your vote is sent to blackchain for verification! Hash: " + success);
+          Session.set("alerts", alerts);
+
       });
 
       var filter = pollContract.NewVote({}, {fromBlock: this.block, toBlock: 'latest'}, function(err, result) {
         if (!err) {
           console.log("Successfully vote! Result is: " + result);
           console.log("Successfully voted: " + result.args.votechoice)
+
+          var alerts = Session.get("alerts");
+
+          if(alerts === undefined) {
+            console.log("bad");
+            return;
+          }
+
+          alerts.push("Successfully voted! You voted: " + result.args.votechoice);
+
+          Session.set("alerts", alerts);
+
         }
         else {
           console.log("Failed vote event! Err is: " + err);
