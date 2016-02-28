@@ -25,8 +25,10 @@
 <template name="CreatePoll">
   <form id="create-poll-form">
     <div class="form-group">
-      <label for="title" class="control-label">Title:</label>
+      <label for="poll-title" class="control-label">Title:</label>
       <input type="text" class="form-control" id="poll-title" name="poll-title">
+      <label for="poll-limit" class="control-label">Limit:</label>
+      <input id="poll-limit" type="number" min="0" max="100" step="1" value="0">
     </div>
   </form>
   <button id="submit">Submit</button>
@@ -50,14 +52,20 @@
         </h2>
       </div>
     </div>
-    <div class="row">
-      <span class="poll-yes">Yes: {{yes}}</span>
-      <span class="poll-no">No: {{no}}</span>
-    </div>
-    <div class="row">
-      <button id="yes-button">Yes</button>
-      <button id="no-button">No</button>
-    </div>
+    {{#if withinLimit}}
+      <div class="row">
+        <span class="poll-yes">Yes: {{yes}}</span>
+        <span class="poll-no">No: {{no}}</span>
+      </div>
+      <div class="row">
+        <button id="yes-button">Yes</button>
+        <button id="no-button">No</button>
+      </div>
+    {{else}}
+      <div class="row">
+        <span>Poll Limit Reached!</span>
+      </div>
+    {{/if}}
   </div>
 </template>
 

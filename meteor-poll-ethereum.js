@@ -17,16 +17,19 @@ if (Meteor.isClient) {
 
   Template.PollOption.events({
     'click #createPollButton': function() {
-      Router.go("/createPoll")
+      Router.go("/createPoll");
+      // window.location.href = "/createPoll";
     }
   });
 
   Template.CreatePoll.events({
     'click #submit': function(event) {
       var pollTitle = $("#poll-title").val();
+      var pollLimit = $("#poll-limit").val();
 
       var poll = {
         title: pollTitle,
+        limit: pollLimit,
         yes: 0,
         no: 0
       };
@@ -34,7 +37,8 @@ if (Meteor.isClient) {
       var addedPoll = Polls.insert(poll);
       document.getElementById("create-poll-form").reset();
 
-      Router.go("/polls")
+      Router.go("/polls");
+      // window.location.href ="/polls";
     }
   });
 
@@ -43,6 +47,13 @@ if (Meteor.isClient) {
       var lepolls = Polls.find().fetch();
 
       return lepolls;
+    }
+
+  });
+
+  Template.Poll.helpers({
+    withinLimit: function() {
+      return this.yes + this.no < this.limit;
     }
   });
 
