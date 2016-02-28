@@ -1,4 +1,62 @@
 
+Users = new Mongo.Collection("users");
+Polls = new Mongo.Collection("polls");
+
+
+Meteor.methods({
+  newUser: function (username) {
+    //
+      if (! Meteor.userId()) {
+      throw new Meteor.Error("not-authorized");
+    }
+ 
+    Users.insert({
+      question: question,
+      createdAt: new Date(),
+      wallet: wallet, // generate new wallet for user
+      username: Meteor.user().username
+    });
+  },
+  newPoll: function (question) {
+    // Make sure the user is logged in before inserting a task
+    if (! Meteor.userId()) {
+      throw new Meteor.Error("not-authorized");
+    }
+ 
+    Polls.insert({
+      question: question,
+      yes: yesWalletId, //generate wallet and return the walletId
+      no: noWalletId, //generate wallet and return the walletId
+      createdAt: new Date(),
+      eligableVoters: listofusernames, //parse a list of text of usernames by comma and space (or max voters)
+      owner: Meteor.userId(),
+      username: Meteor.user().username
+    });
+  },
+  // for hackathon version we assign the user who vote is voting with a pre-generated wallet
+  // with 1 coin, rather than attach the wallets with 1 coin to the users when create poll
+  votePoll: function (pollId, vote) {
+    // voting Yes or No
+    if(vote) {
+      //transfer 1 coin to YES wallet
+    } else if(!vote) {
+      //transfer 1 coin to YES wallet
+    }
+  },
+
+  transferVote: function (transferee, transferer) {
+    // transfer coins from transferer wallet to the transferee
+  },
+
+  deleteTask: function (taskId) {
+    Tasks.remove(taskId);
+  },
+  setChecked: function (taskId, setChecked) {
+    Tasks.update(taskId, { $set: { checked: setChecked} });
+  }
+});
+
+
 
 Tasks = new Mongo.Collection("tasks");
  
