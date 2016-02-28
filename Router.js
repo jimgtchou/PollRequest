@@ -5,3 +5,7 @@ Router.route('/createPoll', function () {
 Router.route("/polls", function() {
   this.render("Polls");
 });
+
+Router.route("/", function() {
+	this.redirect("/polls");
+});
