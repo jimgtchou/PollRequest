@@ -31,7 +31,8 @@ if (Meteor.isClient) {
         title: pollTitle,
         limit: pollLimit,
         yes: 0,
-        no: 0
+        no: 0,
+        createdAt: new Date()
       };
 
       var addedPoll = Polls.insert(poll);
@@ -44,9 +45,7 @@ if (Meteor.isClient) {
 
   Template.Polls.helpers({
     polls: function() {
-      var lepolls = Polls.find().fetch();
-
-      return lepolls;
+      return Polls.find({}, {sort: {createdAt: -1}});
     }
 
   });

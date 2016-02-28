@@ -1,71 +1,88 @@
 <head>
   <title>meteor-poll-ethereum</title>
+  <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap-theme.min.css" integrity="sha384-fLW2N01lMqjakBkx3l/M9EahuwpSfeNvV63J5ezn3uZzapT0u7EYsXMjQV+0En5r" crossorigin="anonymous">
+
+
+
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 </head>
 
 <body>
-  <h1>Welcome to Ethereum Poll!</h1>
 
+  <div class = "jumbotron" align = "center"> 
+  <h1>Welcome to Poll Request!</h1>
+  <h2> a decentralized voting platform running on the <a href = "https://ethereum.org">ethereum</a> blockchain </h2>
+  <div class = "row">
   {{> PollOption}}
+  </div>
+  </div>
+
+  
 </body>
 
-
 <template name="PollOption">
-  <button id="createPollButton">Create Poll</button>
-  <button id="viewPollListButton">View List of Polls</button>
+  <button id="createPollButton" class="btn btn-warning">Create Poll</button>
 </template>
-
-
-<!--
-<template name="hello">
-  <button>Click Me</button>
-  <p>You've pressed the button {{counter}} times.</p>
-</template> -->
 
 
 <template name="CreatePoll">
-  <form id="create-poll-form">
-    <div class="form-group">
-      <label for="poll-title" class="control-label">Title:</label>
-      <input type="text" class="form-control" id="poll-title" name="poll-title">
-      <label for="poll-limit" class="control-label">Limit:</label>
-      <input id="poll-limit" type="number" min="0" max="100" step="1" value="0">
+  <div class="container-fluid">
+    <div class="row"> 
+      <div class="col-md-3"></div>
+      <div class="col-md-6">
+        <form id="create-poll-form">
+          <div class="form-group">
+            <br>
+            <label for="poll-title" class="control-label">Title</label>
+            <input type="text" class="form-control" id="poll-title" name="poll-title" placeholder="Enter your poll question">
+            <br>
+            <label for="poll-limit" class="control-label">Limit:</label>
+            <input id="poll-limit" type="number" min="0" max="100" step="1" value="0">
+          </div>
+        </form>
+        <button id="submit" class="btn btn-primary">Submit</button>
+      </div>
+      <div class="col-md-3"></div>
     </div>
-  </form>
-  <button id="submit">Submit</button>
+  </div>
 </template>
-
 <template name="Polls">
-  <div class="container">
+  <div class="container-fluid">
     {{#each polls}}
       {{> Poll}}
     {{/each}}
   </div>
 </template>
-
-
 <template name="Poll">
-  <div class="poll-container">
+  <div class="container">
     <div class="row">
-      <div class="col-xs-12 col-md-offset-1 col-md-4" id="pollInfo">
+      <div class="col-md-3"></div>
+      <div class="col-md-6" id="pollInfo">
         <h2 class="poll-title">
           <span class="poll-title">{{title}}</span>
         </h2>
-      </div>
-    </div>
-    {{#if withinLimit}}
-      <div class="row">
+        {{#if withinLimit}}
         <span class="poll-yes">Yes: {{yes}}</span>
         <span class="poll-no">No: {{no}}</span>
+        <br>
+        <button id="yes-button" class="btn btn-success">Yes</button>
+        <button id="no-button" class="btn btn-danger">No</button>
+        {{else}}
+        <div class="row">
+          <span> Poll limit reached!</span>
+          <br>
+          <span> Results: </span>
+          <span class="poll-yes">Yes: {{yes}}</span>
+          <span class="poll-no">No: {{no}}</span>
+        </div>
+        {{/if}}
       </div>
-      <div class="row">
-        <button id="yes-button">Yes</button>
-        <button id="no-button">No</button>
-      </div>
-    {{else}}
-      <div class="row">
-        <span>Poll Limit Reached!</span>
-      </div>
-    {{/if}}
+      <div class="col-md-3"></div> 
+    </div>
   </div>
 </template>
-
