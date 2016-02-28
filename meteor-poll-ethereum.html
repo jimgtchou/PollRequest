@@ -1,0 +1,71 @@
+<head>
+  <title>meteor-poll-ethereum</title>
+</head>
+
+<body>
+  <h1>Welcome to Ethereum Poll!</h1>
+
+  {{> PollOption}}
+</body>
+
+
+<template name="PollOption">
+  <button id="createPollButton">Create Poll</button>
+  <button id="viewPollListButton">View List of Polls</button>
+</template>
+
+
+<!--
+<template name="hello">
+  <button>Click Me</button>
+  <p>You've pressed the button {{counter}} times.</p>
+</template> -->
+
+
+<template name="CreatePoll">
+  <form id="create-poll-form">
+    <div class="form-group">
+      <label for="poll-title" class="control-label">Title:</label>
+      <input type="text" class="form-control" id="poll-title" name="poll-title">
+      <label for="poll-limit" class="control-label">Limit:</label>
+      <input id="poll-limit" type="number" min="0" max="100" step="1" value="0">
+    </div>
+  </form>
+  <button id="submit">Submit</button>
+</template>
+
+<template name="Polls">
+  <div class="container">
+    {{#each polls}}
+      {{> Poll}}
+    {{/each}}
+  </div>
+</template>
+
+
+<template name="Poll">
+  <div class="poll-container">
+    <div class="row">
+      <div class="col-xs-12 col-md-offset-1 col-md-4" id="pollInfo">
+        <h2 class="poll-title">
+          <span class="poll-title">{{title}}</span>
+        </h2>
+      </div>
+    </div>
+    {{#if withinLimit}}
+      <div class="row">
+        <span class="poll-yes">Yes: {{yes}}</span>
+        <span class="poll-no">No: {{no}}</span>
+      </div>
+      <div class="row">
+        <button id="yes-button">Yes</button>
+        <button id="no-button">No</button>
+      </div>
+    {{else}}
+      <div class="row">
+        <span>Poll Limit Reached!</span>
+      </div>
+    {{/if}}
+  </div>
+</template>
+
